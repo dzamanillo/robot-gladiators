@@ -34,14 +34,16 @@ var fight = function (enemyName) {
       if (confirmSkip) {
         window.alert(playerName + " has decided to skip this fight. Goodbye.");
         // subtract money
-        playerMoney = playerMoney - 10;
+        playerMoney = Math.max(0, playerMoney - 10);
         console.log("playerMoney", playerMoney);
         break;
       }
     }
 
-    // remove enemy health
-    enemyHealth = enemyHealth - playerAttack;
+    // remove enemy health with random damage
+    var damage = randomNumber(playerAttack - 3, playerAttack);
+    enemyHealth = Math.max(0, enemyHealth - damage);
+
     console.log(
       playerName +
         " attacked " +
@@ -64,8 +66,9 @@ var fight = function (enemyName) {
       window.alert(enemyName + " still has " + enemyHealth + " health left.");
     }
 
-    // remove player health
-    playerHealth = playerHealth - enemyAttack;
+    // remove player health with random damage
+    var damage = randomNumber(enemyAttack - 3, enemyAttack);
+    playerHealth = Math.max(0, playerHealth - damage);
     console.log(
       enemyName +
         " attacked " +
@@ -102,7 +105,7 @@ var startGame = function () {
       var pickedEnemyName = enemyNames[i];
 
       // reset enemyHealth before new fight
-      enemyHealth = 50;
+      enemyHealth = randomNumber(40, 60);
 
       // debugger;
 
@@ -157,7 +160,7 @@ var shop = function () {
       if (playerMoney >= 7) {
         window.alert("Refilling player's health by 20 for 7 dollars.");
         playerHealth = playerHealth + 20;
-        playerMoney = playerMoney - 7;
+        playerMoney = Math.max(0, playerMoney - 7);
       } else {
         window.alert(
           "You don't have enough money! You have " + playerMoney + " dollars."
@@ -170,7 +173,7 @@ var shop = function () {
       if (playerMoney >= 7) {
         window.alert("Upgrading player's attack by 6 for 7 dollars");
         playerAttack = playerAttack + 6;
-        playerMoney = playerMoney - 7;
+        playerMoney = Math.max(0, playerMoney - 7);
       } else {
         window.alert(
           "You don't have enough money! You have " + playerMoney + " dollars."
@@ -187,6 +190,12 @@ var shop = function () {
       shop();
       break;
   }
+};
+
+// Random number function
+var randomNumber = function (min, max) {
+  var value = Math.floor(Math.random() * (max - min + 1) + min);
+  return value;
 };
 
 startGame();
